@@ -1,0 +1,7 @@
+# End-to-end native harness. Expects the haxelib to be registered (haxelib dev)
+# and DISCORD_SDK_ROOT-style mock layout created by scripts/verify.sh.
+-cp ../../src
+-cp .
+-main CppMain
+-cpp ../../build/cpp-harness
+-D discord_sdk_root=../../build/mock_sdk

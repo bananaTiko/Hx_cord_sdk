@@ -1,0 +1,12 @@
+{
+	"name": "discord-social-sdk",
+	"url": "",
+	"license": "MIT",
+	"tags": ["discord", "social", "cpp", "hxcpp", "native", "rich-presence", "friends", "auth", "voice"],
+	"description": "Haxe/hxcpp bindings for the Discord Social SDK: account linking, friends list, rich presence and lobbies.",
+	"version": "0.1.0",
+	"classPath": "src",
+	"releasenote": "Initial release: client lifecycle, account linking, rich presence, relationship list.",
+	"contributors": ["discord-social-sdk"],
+	"dependencies": {"hxcpp": ""}
+}

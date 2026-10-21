@@ -1,0 +1,22 @@
+# Haxe build output
+/build/
+/bin/
+/out/
+/export/
+*.hxml.*.xml
+
+# Local toolchain used for verification (not part of the library)
+/tools/
+/haxelib_local/
+
+# Editor / OS noise
+.DS_Store
+.idea/
+.vscode/
+*.o
+*.obj
+*.so
+*.dylib
+*.dll
+*.lib
+*.exe

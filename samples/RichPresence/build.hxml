@@ -1,0 +1,6 @@
+# Desktop sample. Edit discord_sdk_root to point at your unzipped Social SDK.
+-cp ../../src
+-cp .
+-main Main
+-cpp ../../build/RichPresence
+-D discord_sdk_root=../../lib/discord_social_sdk

@@ -1,0 +1,5 @@
+# Interpreter run of the Haxe-level tests with the mock backend.
+-cp src
+-cp test
+-main TestMain
+--interp
