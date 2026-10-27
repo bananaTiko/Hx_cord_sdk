@@ -1,4 +1,4 @@
-# discord-social-sdk (Haxe)
+# Hxcord
 
 Haxe/hxcpp bindings for the [Discord Social SDK](https://docs.discord.com/developers/discord-social-sdk/overview) — account
 linking, the unified friends list, and rich presence, driven from Haxe.
