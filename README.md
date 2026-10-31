@@ -532,32 +532,6 @@ added half-way. The checklist for, say, `hxcord.<engine>`:
 Steps 2–3 are enforced: the `docs` job fails when a `src/hxcord/<id>/HXCord.hx` has no check under `test/`
 importing it, or when `scripts/verify.sh` has no step naming that adapter.
 
-## CI and releases
-
-Two GitHub Actions workflows ship with the repo:
-
-* [`.github/workflows/ci.yml`](.github/workflows/ci.yml) runs on every push and pull request: interpreter
-  tests, the `discord.social` alias suite, the C shim smoke test, the hxcpp and HashLink harnesses, compile
-  checks for the Flixel, OpenFL, HaxePunk, Heaps and Kha adapters, and a check against the real SDK
-  headers when the reference clone succeeds. Its second job covers the aliases and the adapter list
-  without a compiler: it discovers every public type and every portable internal in the tree and fails
-  when one has no `discord.social` alias (target-specific internals are exempt, they exist on one target
-  only), and it fails when a framework adapter has no compile check under `test/` or no step in
-  `scripts/verify.sh`. The HashLink build and the Kha checkout are cached between runs.
-* [`.github/workflows/release.yml`](.github/workflows/release.yml) creates a version **on demand**:
-
-```bash
-# bump the minor version automatically (or pass patch/major via the UI)
-gh workflow run release.yml -f version=1.2.0
-```
-
-It validates the semver, updates `haxelib.json`, re-runs the full verification (the same `--all` as CI,
-including the five adapter compile checks, so the framework haxelibs and a C++20 compiler are installed
-first), builds `hxcord-<version>.zip` with checksums, commits the bump, tags `v<version>`, pushes the tag
-and publishes a GitHub release with the zip attached. The zip includes `extraParams.hxml`, which is what
-carries `-D HXCPP_NO_CPP11` for `-lib hxcord` users. Set the `publish_to_haxelib` input (and a `HAXELIB_PASSWORD` repository
-secret with your API key) to also submit to lib.haxe.org.
-
 ## Troubleshooting
 
 | Symptom | Cause |
