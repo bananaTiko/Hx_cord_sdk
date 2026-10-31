@@ -1,4 +1,4 @@
-package discord.social.internal;
+package hxcord.internal;
 
 #if cpp
 /**

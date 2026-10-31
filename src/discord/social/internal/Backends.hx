@@ -1,17 +1,7 @@
 package discord.social.internal;
 
 /**
-	Chooses the backend for the current target.
-
-	- cpp without `-D discord_social_sdk_mock`: the real Discord Social SDK.
-	- everywhere else (and with the mock define): `MockBackend`.
+	Moved to `hxcord.internal.Backends`; this alias keeps code written against the
+	0.2 package (`discord.social.internal.Backends`) compiling.
 **/
-class Backends {
-	public static function create():Backend {
-		#if (cpp && !discord_social_sdk_mock)
-		return new NativeBackend();
-		#else
-		return new MockBackend();
-		#end
-	}
-}
+typedef Backends = hxcord.internal.Backends;

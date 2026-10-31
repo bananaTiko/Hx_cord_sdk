@@ -1,12 +1,12 @@
 {
-	"name": "discord-social-sdk",
-	"url": "",
+	"name": "hxcord",
+	"url": "https://github.com/bananaTiko/hx_cord_sdk",
 	"license": "MIT",
-	"tags": ["discord", "social", "cpp", "hxcpp", "native", "rich-presence", "friends", "auth", "voice"],
-	"description": "Haxe/hxcpp bindings for the Discord Social SDK: account linking, friends list, rich presence and lobbies.",
-	"version": "0.1.0",
+	"tags": ["discord", "social", "cpp", "hxcpp", "hashlink", "flixel", "openfl", "haxepunk", "heaps", "kha", "nape", "native", "rich-presence", "friends", "auth", "voice", "lobbies", "chat"],
+	"description": "HXCord: Haxe bindings for the Discord Social SDK — account linking, friends, rich presence, lobbies and lobby chat, direct messages, voice calls with audio devices and activity invites, on hxcpp and HashLink, with optional HaxeFlixel, OpenFL, HaxePunk, Heaps.io and Kha adapters.",
+	"version": "1.0.0",
 	"classPath": "src",
-	"releasenote": "Initial release: client lifecycle, account linking, rich presence, relationship list.",
-	"contributors": ["discord-social-sdk"],
+	"releasenote": "First release: Discord Social SDK bindings for hxcpp and HashLink (account linking, friends, rich presence, lobbies and lobby chat, direct messages, voice with audio devices, activity invites, device authorization), optional HaxeFlixel, OpenFL, HaxePunk, Heaps.io and Kha adapters.",
+	"contributors": ["hxcord"],
 	"dependencies": {"hxcpp": ""}
 }

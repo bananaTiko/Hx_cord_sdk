@@ -1,6 +1,12 @@
-# Desktop sample. Edit discord_sdk_root to point at your unzipped Social SDK.
+# Desktop sample. Run `haxe build.hxml` from this folder.
+#
+# Unzip Discord's C++ Social SDK into lib/discord_social_sdk at the repository
+# root (see README, "Where the SDK files go"); the path below is relative to this
+# folder. Point discord_sdk_root somewhere else if you keep the SDK outside the
+# repo, and prefer an absolute path so it does not depend on the cwd.
 -cp ../../src
 -cp .
 -main Main
 -cpp ../../build/RichPresence
 -D discord_sdk_root=../../lib/discord_social_sdk
+-D HXCPP_NO_CPP11

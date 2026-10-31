@@ -1,21 +1,6 @@
 package discord.social;
 
 /**
-	Kind of failure carried by a `ClientResult`, mirroring `discordpp::ErrorType`.
+	Moved to `hxcord.ErrorType`. This alias keeps code written against the 0.2 names (`discord.social.ErrorType`) compiling; use the new name in new code.
 **/
-enum abstract ErrorType(String) {
-	var None = "None";
-	var NetworkError = "NetworkError";
-	var HTTPError = "HTTPError";
-	var ClientNotReady = "ClientNotReady";
-	var Disabled = "Disabled";
-	var ClientDestroyed = "ClientDestroyed";
-	var ValidationError = "ValidationError";
-	var Aborted = "Aborted";
-	var AuthorizationFailed = "AuthorizationFailed";
-	var RPCError = "RPCError";
-	var Unknown = "Unknown";
-
-	@:from static inline function fromString(value:String):ErrorType
-		return cast value;
-}
+typedef ErrorType = hxcord.ErrorType;

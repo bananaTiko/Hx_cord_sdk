@@ -2,6 +2,8 @@
 
 `discord_shim.{h,cpp}` is the only place the Discord Social SDK is used. It exposes a flat
 C ABI that hxcpp can bind with `@:native` externs, so Haxe never sees C++ types.
+`hashlink/ds_hl.cpp` exposes that same C ABI to HashLink, so both backends run one
+implementation.
 
 ## Why a shim instead of direct externs
 
@@ -36,8 +38,28 @@ The shim only needs the SDK headers to be type-checked against the real API:
 g++ -std=c++20 -fsyntax-only -I . -I /path/to/discord_social_sdk/include discord_shim.cpp
 ```
 
+hxcpp 4.3.2 appends its toolchain `-std=c++11` to every C++ command line *after* per-group
+flags, which would silently win over the `-std=c++20` the shim needs. The haxelib's
+`extraParams.hxml` sets `-D HXCPP_NO_CPP11` for exactly that reason; builds that use
+`-cp src` rather than `-lib hxcord` must pass it themselves. `discord_shim.cpp` asserts
+`__cplusplus`, so a dropped flag fails with a readable message instead of a template error.
+
 `scripts/verify.sh` runs this automatically when `DISCORD_SDK_INCLUDE` is set. The shim
 uses `Client::GetCurrentUserV2` rather than the deprecated `GetCurrentUser`.
+
+## HashLink adapter
+
+`hashlink/ds_hl.cpp` is a generated-style wrapper: every `ds_*` function gets an `HL_NAME`
+entry point that converts `vbyte*`/null-terminated UTF-8 to `const char*` and back. It is
+compiled into `hxcord.hdll` together with `discord_shim.cpp`:
+
+```bash
+g++ -std=c++20 -shared -fPIC -I . -I /path/to/sdk/include -I /path/to/hashlink/include \
+    hashlink/ds_hl.cpp discord_shim.cpp -o hxcord.hdll
+```
+
+Keep the signatures in sync with `src/discord/social/internal/HlShim.hx`; a missing or
+mistyped primitive fails at load time with `Could not find function`.
 
 ## Layout expected at `discord_sdk_root`
 

@@ -9,6 +9,10 @@
 /tools/
 /haxelib_local/
 
+# Discord Social SDK download: not redistributable, and where the samples expect
+# it relative to this checkout (see README, "Where the SDK files go")
+/lib/discord_social_sdk/
+
 # Editor / OS noise
 .DS_Store
 .idea/
