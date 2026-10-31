@@ -1,7 +1,17 @@
-# End-to-end native harness. Expects the haxelib to be registered (haxelib dev)
-# and DISCORD_SDK_ROOT-style mock layout created by scripts/verify.sh.
--cp ../../src
--cp .
+# End-to-end native harness. Run from the project root, passing the SDK root:
+#
+#   ./scripts/verify.sh --with-cpp
+#   haxe test/cpp_harness/cpp.hxml -D discord_sdk_root=/absolute/path/to/sdk
+#
+# scripts/verify.sh lays out a header-only mock SDK under build/mock_sdk and
+# passes its absolute path; real SDK builds pass their unzipped download instead.
+-cp src
+-cp test/shared
+-cp test/cpp_harness
 -main CppMain
--cpp ../../build/cpp-harness
--D discord_sdk_root=../../build/mock_sdk
+-cpp build/cpp-harness
+# hxcpp 4.3 appends its own -std=c++11 after group flags; see extraParams.hxml.
+-D HXCPP_NO_CPP11
+# hxcpp resolves the SDK library path against the build directory, so pass an
+# absolute path on the command line (scripts/verify.sh does).
+# -D discord_sdk_root=/absolute/path/to/sdk

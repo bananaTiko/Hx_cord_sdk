@@ -1,11 +1,11 @@
-import discord.social.Activity;
-import discord.social.ActivityGamePlatforms;
-import discord.social.AuthorizationArgs;
-import discord.social.AuthorizationTokenType;
-import discord.social.Client;
-import discord.social.ClientOptions;
-import discord.social.ClientStatus;
-import discord.social.LoggingSeverity;
+import hxcord.Activity;
+import hxcord.ActivityGamePlatforms;
+import hxcord.AuthorizationArgs;
+import hxcord.AuthorizationTokenType;
+import hxcord.Client;
+import hxcord.ClientOptions;
+import hxcord.ClientStatus;
+import hxcord.LoggingSeverity;
 import haxe.Int64;
 
 /**
@@ -26,10 +26,10 @@ class CppMain {
 
 	static function check(condition:Bool, what:String):Void {
 		if (condition) {
-			Sys.println('  ok   $what');
+			Sys.println("  ok   " + what);
 		} else {
 			failures++;
-			Sys.println('  FAIL $what');
+			Sys.println("  FAIL " + what);
 		}
 	}
 
@@ -103,6 +103,10 @@ class CppMain {
 		check(friends[0].username == "wumpus", "friend data survives the round trip");
 		check(client.searchFriends("wump").length == 1, "synchronous friend search works");
 
+		final shared = FeatureTests.run(client, "cpp");
+		failures += shared.failures;
+		check(shared.checks > 0, "the shared feature suite executed over the C ABI");
+
 		check(logs.length > 0, "SDK logs are forwarded");
 
 		client.shutdown(2);
@@ -110,7 +114,7 @@ class CppMain {
 		client.runCallbacks();
 		check(true, "runCallbacks after shutdown is safe");
 
-		Sys.println((failures == 0 ? "PASS" : "FAIL") + ' (cpp harness, $failures failures)');
+		Sys.println((failures == 0 ? "PASS" : "FAIL") + " (cpp harness, " + failures + " failures)");
 		Sys.exit(failures == 0 ? 0 : 1);
 	}
 }
