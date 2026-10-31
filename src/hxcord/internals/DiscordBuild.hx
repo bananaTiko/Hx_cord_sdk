@@ -1,4 +1,4 @@
-package discord.social.internal;
+package hxcord.internal;
 
 #if cpp
 #if discord_social_sdk_mock
@@ -14,7 +14,9 @@ class DiscordBuild {
 	Wires the native shim and the Discord Social SDK into an hxcpp build.
 
 	* `discord_shim.cpp` is its own file group compiled as C++20, so the SDK's
-	  header-only wrapper never touches hxcpp's generated C++11 sources.
+	  header-only wrapper never touches hxcpp's generated C++11 sources. The
+	  standard is passed explicitly because hxcpp (4.3.x) ignores the
+	  `cxx_standard` attribute on a file group.
 	* `discord_sdk_root` must point at the unzipped SDK directory; the include
 	  path, the import library and the runtime library are all derived from it.
 	* The runtime library is copied next to the executable, which is what the SDK
@@ -24,18 +26,27 @@ class DiscordBuild {
 	`${...}` placeholders that hxcpp's build tool substitutes.
 **/
 @:keep
-@:build(discord.social.internal.BuildCheck.ensureSdk())
+@:build(hxcord.internal.BuildCheck.ensureSdk())
 @:buildXml('
 <files id="discord_social_sdk_shim" cxx_standard="20">
-	<compilerflag value="-I${haxelib:discord-social-sdk}/native"/>
+	<compilerflag value="-I${haxelib:hxcord}/native"/>
 	<compilerflag value="-I${removeQuotes:discord_sdk_root}/include"/>
-	<file name="${haxelib:discord-social-sdk}/native/discord_shim.cpp"/>
+	<section if="windows">
+		<compilerflag value="/std:c++20"/>
+	</section>
+	<section if="linux">
+		<compilerflag value="-std=c++20"/>
+	</section>
+	<section if="macos">
+		<compilerflag value="-std=c++20"/>
+	</section>
+	<file name="${haxelib:hxcord}/native/discord_shim.cpp"/>
 </files>
 
 <!-- Generated code includes discord_shim.h through @:include on the externs,
      so the main group needs the shim include directory too. -->
 <files id="haxe">
-	<compilerflag value="-I${haxelib:discord-social-sdk}/native"/>
+	<compilerflag value="-I${haxelib:hxcord}/native"/>
 	<compilerflag value="-I${removeQuotes:discord_sdk_root}/include"/>
 </files>
 

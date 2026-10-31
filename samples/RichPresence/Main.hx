@@ -1,8 +1,8 @@
-import discord.social.AuthorizationArgs;
-import discord.social.AuthorizationTokenType;
-import discord.social.Activity;
-import discord.social.Client;
-import discord.social.LoggingSeverity;
+import hxcord.AuthorizationArgs;
+import hxcord.AuthorizationTokenType;
+import hxcord.Activity;
+import hxcord.Client;
+import hxcord.LoggingSeverity;
 
 /**
 	Minimal desktop sample: link an account, connect, publish rich presence and
@@ -20,6 +20,7 @@ import discord.social.LoggingSeverity;
 **/
 class Main {
 	static var presencePublished:Bool = false;
+	static var lobbyJoined:Bool = false;
 
 	static function main() {
 		final appId = Sys.getEnv("DISCORD_APP_ID");
@@ -32,7 +33,7 @@ class Main {
 		client.addLogListener(function(message, severity) Sys.println('[discord/${severity.label()}] $message'),
 			LoggingSeverity.Info);
 		client.onStatusChanged(function(status, error, detail) {
-			Sys.println('status: $status' + (error == discord.social.ClientError.None ? "" : ' (error=$error detail=$detail)'));
+			Sys.println('status: $status' + (error == hxcord.ClientError.None ? "" : ' (error=$error detail=$detail)'));
 		});
 		Sys.println('Discord Social SDK ${client.version()} via ${client.backendName()} backend');
 
@@ -53,6 +54,10 @@ class Main {
 			if (client.isReady() && !friendsRequested) {
 				friendsRequested = true;
 				fetchFriends(client);
+			}
+			if (client.isReady() && !lobbyJoined) {
+				lobbyJoined = true;
+				lobbyDemo(client);
 			}
 
 			Sys.sleep(0.016);
@@ -97,10 +102,53 @@ class Main {
 		activity.partyCurrentSize = 1;
 		activity.partyMaxSize = 4;
 		activity.startTimestamp = Sys.time();
-		activity.supportedPlatforms = discord.social.ActivityGamePlatforms.Desktop;
+		activity.supportedPlatforms = hxcord.ActivityGamePlatforms.Desktop;
 
 		client.updateRichPresence(activity, function(result) {
 			Sys.println(result.successful ? "rich presence published" : 'rich presence failed: $result');
+		});
+	}
+
+	/**
+		Optional party demo: joins the lobby named by `DISCORD_LOBBY_SECRET`, says
+		hello in its chat, and joins voice on `DISCORD_VOICE_CHANNEL` when that is
+		set too. Lobbies and voice must be enabled for the application in the
+		Developer Portal.
+	**/
+	static function lobbyDemo(client:Client):Void {
+		final secret = Sys.getEnv("DISCORD_LOBBY_SECRET");
+		if (secret == null || secret.length == 0) return;
+
+		client.createOrJoinLobby(secret, function(result, lobby) {
+			if (!result.successful || lobby == null) {
+				Sys.println('createOrJoinLobby failed: $result');
+				return;
+			}
+			Sys.println('lobby ${lobby.id} with ${lobby.memberIds.length} member(s)');
+
+			client.onLobbyMemberAdded(function(lobbyId, memberId) {
+				if (lobbyId == lobby.id) Sys.println('  $memberId joined');
+			});
+			client.onLobbyDeleted(function(lobbyId) {
+				if (lobbyId == lobby.id) Sys.println("lobby closed");
+			});
+			client.onMessageCreated(function(messageId, channelId) {
+				final message = client.getMessage(messageId);
+				if (message != null && message.lobbyId == lobby.id)
+					Sys.println('  ${message.authorId}: ${message.content}');
+			});
+
+			client.sendLobbyMessage(lobby.id, "hello from Haxe", function(sent, message) {
+				if (!sent.successful) Sys.println('sendLobbyMessage failed: $sent');
+			});
+
+			final voice = Sys.getEnv("DISCORD_VOICE_CHANNEL");
+			if (voice == null || voice.length == 0) return;
+			client.onSpeakingStatusChanged(function(channelId, userId, speaking) {
+				if (channelId == voice) Sys.println('  $userId ${speaking ? "started" : "stopped"} talking');
+			});
+			final call = client.startCall(voice);
+			Sys.println(call == null ? "startCall was refused" : 'joined voice on $voice');
 		});
 	}
 

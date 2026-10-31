@@ -1,19 +1,6 @@
 package discord.social;
 
 /**
-	Connection-level error reported through the status callback,
-	mirroring `discordpp::Client::Error`.
-
-	These describe the websocket itself. Failures of individual SDK calls are
-	reported as `ErrorType` inside a `ClientResult` instead.
+	Moved to `hxcord.ClientError`. This alias keeps code written against the 0.2 names (`discord.social.ClientError`) compiling; use the new name in new code.
 **/
-enum abstract ClientError(String) {
-	var None = "None";
-	var ConnectionFailed = "ConnectionFailed";
-	var UnexpectedClose = "UnexpectedClose";
-	var ConnectionCanceled = "ConnectionCanceled";
-	var Unknown = "Unknown";
-
-	@:from static inline function fromString(value:String):ClientError
-		return cast value;
-}
+typedef ClientError = hxcord.ClientError;

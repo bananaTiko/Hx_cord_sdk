@@ -1,0 +1,12 @@
+# Applied automatically to projects that use `-lib hxcord`.
+#
+# hxcpp 4.3.x appends its toolchain's `-std=c++11` to every C++ command line
+# after the per-file-group flags, which would override the `-std=c++20` the
+# Discord shim needs (discordpp.h requires C++17+, the shim asserts C++20).
+# HXCPP_NO_CPP11 tells the toolchain not to emit that forced `-std`, leaving the
+# shim's own C++20 flag in effect. hxcpp's generated sources then build with
+# your compiler's default standard (C++17 with current GCC/Clang, which they
+# support).
+#
+# Ignored on non-cpp targets, where nothing native is compiled.
+-D HXCPP_NO_CPP11

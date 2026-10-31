@@ -1,0 +1,10 @@
+# HashLink harness. Run from the project root; build/hl must already contain
+# hxcord.hdll (scripts/verify.sh --with-hashlink builds it).
+#
+#   haxe test/hl_harness/hl.hxml
+#   cd build/hl && hl HlMain.hl
+-cp src
+-cp test/shared
+-cp test/hl_harness
+-main HlMain
+-hl build/hl/HlMain.hl
