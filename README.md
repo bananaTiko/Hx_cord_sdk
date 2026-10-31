@@ -1,6 +1,6 @@
-# HXCord (Haxe)
+# HXcord (Haxe)
 
-**HXCord** is a Haxe binding for the [Discord Social SDK](https://docs.discord.com/developers/discord-social-sdk/overview) —
+**HXcord** is a Haxe binding for the [Discord Social SDK](https://docs.discord.com/developers/discord-social-sdk/overview) —
 account linking, the unified friends list, rich presence, lobbies and lobby chat, direct messages, voice calls
 with audio device management, and activity invites — on **hxcpp** and **HashLink**, with optional adapters for
 **HaxeFlixel**, **OpenFL**, **HaxePunk**, **Heaps.io** and **Kha**.
